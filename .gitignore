@@ -38,3 +38,7 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+# Ignore application-private.properties
+/src/main/resources/application-private.properties
+

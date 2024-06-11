@@ -14,7 +14,7 @@ class MessageController(@Autowired val vkService: VkService) {
 
     @PostMapping
     fun replay(@RequestBody incoming: Incoming): String {
-        vkService.sendMessage(incoming)
+        if (incoming.type == "message_new") vkService.sendMessage(incoming)
         return "ok"
     }
 }
