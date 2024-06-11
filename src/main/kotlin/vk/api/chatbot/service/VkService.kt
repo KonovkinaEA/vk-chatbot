@@ -15,11 +15,7 @@ class VkService(
     private val restTemplate: RestTemplate,
     private val logger: Logger,
 ) {
-    fun sendMessage(
-        text: String?,
-        peerId: Long?,
-        version: String?,
-    ): Result {
+    fun sendMessage(text: String?, peerId: Long?, version: String?): Result {
         val url = UriComponentsBuilder.newInstance()
             .scheme("https")
             .host("api.vk.com")

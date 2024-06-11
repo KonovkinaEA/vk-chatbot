@@ -13,7 +13,7 @@ import vk.api.chatbot.service.VkService
 class MessageController(@Autowired val vkService: VkService) {
 
     @PostMapping
-    fun replay(@RequestBody incoming: Incoming): String {
+    fun send(@RequestBody incoming: Incoming): String {
         if (incoming.type == "message_new") vkService.sendMessage(
             incoming.`object`?.message?.text,
             incoming.`object`?.message?.peerId,

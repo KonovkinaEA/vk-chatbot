@@ -38,3 +38,18 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.register("buildAndRun") {
+    group = "application"
+    description = "Собрать и запустить приложение"
+
+    dependsOn("build")
+
+    doLast {
+        javaexec {
+            mainClass.set("vk.api.chatbot.VkChatbotApplicationKt")
+            classpath = sourceSets["main"].runtimeClasspath
+        }
+    }
+}
+
