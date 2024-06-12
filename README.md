@@ -32,3 +32,6 @@
     ```bash
     ./gradlew buildAndRun
     ```
+
+## Пример использования
+https://github.com/KonovkinaEA/vk-chatbot/assets/70512444/32bd2c35-292d-4bac-8175-26df522ea7a3
