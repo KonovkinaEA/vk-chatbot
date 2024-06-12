@@ -1,6 +1,7 @@
 package vk.api.chatbot
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import vk.api.chatbot.config.VkProperties
 import vk.api.chatbot.controller.MessageController
 import vk.api.chatbot.model.Incoming
 import vk.api.chatbot.model.Message
@@ -21,34 +23,24 @@ import vk.api.chatbot.service.VkService
 class MessageControllerTest {
 
     private val vkService = mockk<VkService>(relaxed = true)
+    private val vkProperties = mockk<VkProperties>(relaxed = true) {
+        every { confirmation } returns CONFIRMATION
+    }
 
-    private val messageController = MessageController(vkService)
+    private val messageController = MessageController(vkService, vkProperties)
     private val mockMvc = MockMvcBuilders.standaloneSetup(messageController).build()
 
     private val mapper = jacksonObjectMapper()
 
     @Test
-    fun `should not call vkService sendMessage when type is not message_new`() {
-        val incoming = Incoming(
-            type = "message_new",
-            `object` = Object(
-                message = Message(
-                    text = "Hello",
-                    peerId = 12345
-                )
-            ),
-            v = "5.131"
-        )
-
+    fun `should return confirmation string when type is confirmation`() {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(incoming.copy(type = "other_type")))
+                .content(mapper.writeValueAsString(incomingObjects().first().copy(type = "confirmation")))
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string("ok"))
-
-        verify(exactly = 0) { vkService.sendMessage(any(), any(), any()) }
+            .andExpect(MockMvcResultMatchers.content().string(CONFIRMATION))
     }
 
     @ParameterizedTest
@@ -71,7 +63,22 @@ class MessageControllerTest {
         }
     }
 
+    @Test
+    fun `should not call vkService sendMessage when type is not message_new and confirmation`() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(incomingObjects().first().copy(type = "other_type")))
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().string("ok"))
+
+        verify(exactly = 0) { vkService.sendMessage(any(), any(), any()) }
+    }
+
     companion object {
+        private const val CONFIRMATION = "confirmation"
+
         @JvmStatic
         fun incomingObjects() = listOf(
             Incoming(type = "message_new", `object` = null, v = "5.199"),

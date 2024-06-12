@@ -10,4 +10,5 @@ import org.springframework.context.annotation.PropertySource
 class VkProperties {
     lateinit var version: String
     lateinit var token: String
+    lateinit var confirmation: String
 }
