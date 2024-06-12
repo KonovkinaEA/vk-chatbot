@@ -26,6 +26,8 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("io.mockk:mockk:1.13.11")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.1.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -41,7 +43,7 @@ tasks.withType<Test> {
 
 tasks.register("buildAndRun") {
     group = "application"
-    description = "Собрать и запустить приложение"
+    description = "Build and run the application"
 
     dependsOn("build")
 
