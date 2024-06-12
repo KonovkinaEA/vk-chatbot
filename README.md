@@ -20,10 +20,12 @@
    сообществе ([dev.vk.com/ru/api/callback](https://dev.vk.com/ru/api/callback/getting-started))
 
 4. Создайте в папке `src/main/resources` файл конфигурации `application-private.properties`
-   и запишите туда используемую версию API и ключ доступа
+   и запишите туда используемую версию API, ключ доступа и строку, которую должен вернуть сервер при подтверждении
+   адреса
     ```
     vk.version=YOUR_VERSION
     vk.token=YOUR_ACCESS_TOKEN
+    vk.confirmation=YOUR_CONFIRMATION_STRING
     ```
 
 5. Запустите приложение:
